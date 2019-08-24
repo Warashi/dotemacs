@@ -1,0 +1,5 @@
+*
+!.gitignore
+!Makefile
+!init.org
+!site-lisp/
