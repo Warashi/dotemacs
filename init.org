@@ -2,7 +2,7 @@
 #+begin_src makefile
 EMACS	?= emacs
 all: init.elc
-init.el: README.org
+init.el: init.org
 	$(EMACS) -Q -q --batch --eval \
 		"(progn \
 			(require 'ob-tangle) \
