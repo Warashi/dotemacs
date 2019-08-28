@@ -212,6 +212,7 @@ init.el: init.org
 #+begin_src emacs-lisp
 (leaf input-emacs-mac
   :leaf-autoload nil
+  :leaf-defer nil
   :when (fboundp #'mac-auto-ascii-mode)
   :load-path `(,(locate-user-emacs-file "site-lisp"))
   :require fix-mac-auto-ascii-mode
