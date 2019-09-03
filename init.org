@@ -179,7 +179,7 @@ init.el: init.org
 
 **** 左に行番号を表示
 #+begin_src emacs-lisp
-(add-hook 'emacs-startup-hook #'global-linum-mode)
+(add-hook 'emacs-startup-hook #'global-display-line-numbers-mode)
 #+end_src
 
 **** electric-pair-mode
