@@ -356,7 +356,7 @@ init.el: init.org
   :custom ((ivy-posframe-display-functions-alist . '((swiper          . nil)
                                                      (complete-symbol . ivy-posframe-display-at-point)
                                                      (counsel-M-x     . ivy-posframe-display-at-frame-center)
-                                                     (t               . nil)))))
+                                                     (t               . ivy-posframe-display-at-frame-center)))))
 #+end_src
 
 *** editorconfig
