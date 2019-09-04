@@ -273,6 +273,7 @@ init.el: init.org
 #+begin_src emacs-lisp
 (leaf ace-window
   :straight t
+  :custom ((aw-scope . frame))
   :bind ("C-c o" . ace-window))
 #+end_src
 
