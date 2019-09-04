@@ -108,6 +108,17 @@ init.el: init.org
   (scroll-bar-mode -1))
 #+end_src
 
+*** emacs-macport のタブを使う
+#+begin_src emacs-lisp
+(leaf macport-tabbing
+  :custom ((mac-frame-tabbing . t))
+  :bind (("C-t" . nil)
+         ("C-t C-c" . make-frame-command)
+         ("C-t C-n" . mac-next-tab)
+         ("C-t C-p" . mac-previous-tab)
+         ("C-t C-k" . delete-frame)))
+#+end_src
+
 *** 折り返し表示まわり
 #+begin_src emacs-lisp
 (setq-default truncate-lines nil)
