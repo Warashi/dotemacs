@@ -1,4 +1,7 @@
 EMACS	?= emacs
+.PHONY: clean
+clean:
+	rm -f init.mk init.el init.elc
 all: init.elc
 init.mk: init.org
 	$(EMACS) -Q -q --batch --eval \
