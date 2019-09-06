@@ -285,7 +285,8 @@ init.el: init.org
   :hook (emacs-startup-hook . sml/setup))
 (leaf rich-minority
   :straight t
-  :custom ((rm-blacklist . ".*"))
+  :custom ((rm-blacklist . nil)
+           (rm-whitelist . "flymake\\|lsp"))
   :hook (emacs-startup-hook . rich-minority-mode))
 (leaf mini-modeline
   :straight t
