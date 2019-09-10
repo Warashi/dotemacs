@@ -450,6 +450,9 @@ init.el: init.org
   :straight t
   :require t
   :after yasnippet)
+#+end_src
+
+#+begin_src emacs-lisp
 (leaf ivy-yasnippet
   :straight t
   :bind (("C-c y" . ivy-yasnippet)))
