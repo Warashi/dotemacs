@@ -323,6 +323,23 @@ init.el: init.org
   :hook ((lsp-mode-hook . lsp-ui-mode)))
 #+end_src
 
+*** fus.el and snails
+#+begin_src emacs-lisp :tangle no
+(leaf fuz
+  :straight '(fuz :type git :host github :repo "cireu/fuz.el"
+                  :files ("*" (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el" "*-tests.el")))
+  :require t
+  :config
+  (unless (require 'fuz-core nil t)
+    (fuz-build-and-load-dymod)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(leaf snails
+  :straight '(snails :type git :host github :repo "manateelazycat/snails")
+  :require t)
+#+end_src
+
 *** prescient
 #+begin_src emacs-lisp
 (leaf prescient
