@@ -309,6 +309,8 @@ init.el: init.org
   :straight t)
 (leaf edit-indirect
   :straight t)
+(leaf json-mode
+  :straight t)
 #+end_src
 
 *** language server protocol
