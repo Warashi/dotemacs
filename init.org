@@ -57,7 +57,7 @@ init.el: init.org
 #+end_src
 
 *** hippie-expandを使う
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (substitute-key-definition 'dabbrev-expand 'hippie-expand global-map)
 #+end_src
 
@@ -325,8 +325,8 @@ init.el: init.org
   :hook ((lsp-mode-hook . lsp-ui-mode)))
 #+end_src
 
-*** fus.el and snails
-#+begin_src emacs-lisp :tangle no
+*** fus.el
+#+begin_src emacs-lisp
 (leaf fuz
   :straight '(fuz :type git :host github :repo "cireu/fuz.el"
                   :files ("*" (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el" "*-tests.el")))
@@ -336,6 +336,7 @@ init.el: init.org
     (fuz-build-and-load-dymod)))
 #+end_src
 
+*** snails
 #+begin_src emacs-lisp :tangle no
 (leaf snails
   :straight '(snails :type git :host github :repo "manateelazycat/snails")
@@ -369,7 +370,7 @@ init.el: init.org
 #+end_src
 
 *** ivy, counsel, swiper
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf ivy
   :straight t
   :hook ((emacs-startup-hook . ivy-mode)))
@@ -389,6 +390,40 @@ init.el: init.org
                                                      (complete-symbol . ivy-posframe-display-at-point)
                                                      (counsel-M-x     . ivy-posframe-display-at-frame-center)
                                                      (t               . ivy-posframe-display-at-frame-center)))))
+#+end_src
+
+*** helm
+#+begin_src emacs-lisp
+(leaf helm
+  :straight t
+  :require helm-config
+  :hook (emacs-startup-hook . helm-mode)
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-b" . helm-buffers-list)
+         ([remap dabbrev-expand] . helm-dabbrev)
+         ("M-s o" . helm-occur)
+         ("M-y" . helm-show-kill-ring)))
+
+(leaf helm-descbinds
+  :straight t
+  :after helm
+  :bind (("C-h b" . helm-descbinds)))
+
+(leaf helm-fuz
+  :straight t
+  :after helm
+  :hook (emacs-startup-hook . helm-fuz-mode))
+
+(leaf helm-ghq
+  :straight t
+  :after helm
+  :bind (("C-c h" . helm-ghq)))
+
+(leaf helm-c-yasnippet
+  :straight t
+  :after helm
+  :bind (("C-c y" . helm-yas-complete)))
 #+end_src
 
 *** editorconfig
