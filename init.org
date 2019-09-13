@@ -506,9 +506,10 @@ init.el: init.org
   :after yasnippet)
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf ivy-yasnippet
   :straight t
+  :after ivy yasnippet
   :bind (("C-c y" . ivy-yasnippet)))
 #+end_src
 
@@ -516,8 +517,7 @@ init.el: init.org
 #+begin_src emacs-lisp
 (leaf magit
   :straight t
-  :bind (("C-c g" . magit-status))
-  :custom ((magit-completing-read-function . 'ivy-completing-read)))
+  :bind (("C-c g" . magit-status)))
 #+end_src
 
 *** direnv
