@@ -311,6 +311,9 @@ init.el: init.org
   :straight t)
 (leaf json-mode
   :straight t)
+(leaf web-mode
+  :straight t
+  :mode ("\\.html?\\'" "\\.jsx?\\'" "\\.tsx?\\'"))
 #+end_src
 
 *** language server protocol
@@ -320,7 +323,8 @@ init.el: init.org
   :custom ((lsp-prefer-flymake . nil))
   :hook ((go-mode-hook . lsp)
          (rust-mode-hook . lsp)
-         (scala-mode-hook . lsp)))
+         (scala-mode-hook . lsp)
+         (web-mode-hook . lsp)))
 (leaf lsp-ui
   :straight t
   :hook ((lsp-mode-hook . lsp-ui-mode)))
