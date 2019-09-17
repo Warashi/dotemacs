@@ -286,7 +286,7 @@ init.el: init.org
 (leaf rich-minority
   :straight t
   :custom ((rm-blacklist . nil)
-           (rm-whitelist . "flyc\\|lsp"))
+           (rm-whitelist . "fly\\|lsp"))
   :hook (emacs-startup-hook . rich-minority-mode))
 (leaf mini-modeline
   :straight t
