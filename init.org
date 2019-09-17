@@ -286,7 +286,7 @@ init.el: init.org
 (leaf rich-minority
   :straight t
   :custom ((rm-blacklist . nil)
-           (rm-whitelist . "flymake\\|lsp"))
+           (rm-whitelist . "flyc\\|lsp"))
   :hook (emacs-startup-hook . rich-minority-mode))
 (leaf mini-modeline
   :straight t
@@ -317,12 +317,20 @@ init.el: init.org
 #+begin_src emacs-lisp
 (leaf lsp-mode
   :straight t
+  :custom ((lsp-prefer-flymake . nil))
   :hook ((go-mode-hook . lsp)
          (rust-mode-hook . lsp)
          (scala-mode-hook . lsp)))
 (leaf lsp-ui
   :straight t
   :hook ((lsp-mode-hook . lsp-ui-mode)))
+#+end_src
+
+*** flycheck
+#+begin_src emacs-lisp
+(leaf flycheck
+  :straight t
+  :hook ((emacs-startup-hook . global-flycheck-mode)))
 #+end_src
 
 *** fus.el
