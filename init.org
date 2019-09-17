@@ -479,7 +479,11 @@ init.el: init.org
 #+begin_src emacs-lisp
 (leaf visual-regexp
   :straight t
+  :custom ((vr/plain . t))
   :bind (("C-c r" . vr/replace)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
 (leaf visual-regexp-steroids
   :straight t
   :require t
