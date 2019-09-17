@@ -194,7 +194,7 @@ init.el: init.org
 #+end_src
 
 **** electric-pair-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (add-hook 'emacs-startup-hook #'electric-pair-mode)
 #+end_src
 
@@ -443,8 +443,22 @@ init.el: init.org
   :bind (("C-c y" . helm-yas-complete)))
 #+end_src
 
-*** evil
+*** expand-region
 #+begin_src emacs-lisp
+(leaf expand-region
+  :straight t)
+#+end_src
+
+*** smartparens
+#+begin_src emacs-lisp
+(leaf smartparens
+  :straight t
+  :require smartparens-config
+  :hook ((prog-mode-hook . smartparens-mode)))
+#+end_src
+
+*** evil
+#+begin_src emacs-lisp :tangle no
 (leaf evil
   :straight t
   :custom ((evil-want-keybinding . nil)
@@ -456,7 +470,7 @@ init.el: init.org
   :hook ((emacs-startup-hook . evil-collection-init)))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf evil-magit
   :straight t
   :require t)
