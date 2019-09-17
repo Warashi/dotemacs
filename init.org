@@ -356,7 +356,7 @@ init.el: init.org
 #+end_src
 
 *** prescient
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf prescient
   :straight t
   :hook ((emacs-startup-hook . prescient-persist-mode)))
