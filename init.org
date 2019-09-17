@@ -525,7 +525,7 @@ init.el: init.org
   :hook (prog-mode-hook . rainbow-delimiters-mode-enable))
 #+end_src
 
-*** regexpをpythonのやつをつかえるようにする
+*** replace処理を見やすくする
 #+begin_src emacs-lisp
 (leaf visual-regexp
   :straight t
@@ -533,6 +533,7 @@ init.el: init.org
   :bind (("C-c r" . vr/replace)))
 #+end_src
 
+*** regexpをpythonのやつをつかえるようにする
 #+begin_src emacs-lisp :tangle no
 (leaf visual-regexp-steroids
   :straight t
