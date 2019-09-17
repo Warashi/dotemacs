@@ -443,6 +443,25 @@ init.el: init.org
   :bind (("C-c y" . helm-yas-complete)))
 #+end_src
 
+*** evil
+#+begin_src emacs-lisp
+(leaf evil
+  :straight t
+  :custom ((evil-want-keybinding . nil)
+           (evil-want-C-u-scroll . t))
+  :hook ((emacs-startup-hook . evil-mode)))
+(leaf evil-collection
+  :straight t
+  :after evil
+  :hook ((emacs-startup-hook . evil-collection-init)))
+#+end_src
+
+#+begin_src emacs-lisp
+(leaf evil-magit
+  :straight t
+  :require t)
+#+end_src
+
 *** editorconfig
 #+begin_src emacs-lisp
 (leaf editorconfig
