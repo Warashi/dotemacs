@@ -446,7 +446,8 @@ init.el: init.org
 *** expand-region
 #+begin_src emacs-lisp
 (leaf expand-region
-  :straight t)
+  :straight t
+  :bind (("C-c e" . er/expand-region)))
 #+end_src
 
 *** smartparens
