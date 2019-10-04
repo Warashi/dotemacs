@@ -459,6 +459,19 @@ init.el: init.org
   :hook ((prog-mode-hook . smartparens-mode)))
 #+end_src
 
+*** git-gutter
+#+begin_src emacs-lisp
+(leaf git-gutter
+  :straight t
+  :hook ((emacs-startup-hook . global-git-gutter-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(leaf git-gutter-fringe
+  :straight t
+  :require t)
+#+end_src
+
 *** evil
 #+begin_src emacs-lisp :tangle no
 (leaf evil
