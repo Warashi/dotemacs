@@ -12,18 +12,13 @@
   "Path of the pygmentize command."
   :type 'string)
 
-(defcustom ox-pygments-style "default"
-  "Style (-S option) of the pygmentize command."
-  :type 'string)
-
 ;;;###autoload
 (defun ox-pygments-org-html-code (code contents info)
   "export to html function with pygments code highlight."
   (let ((temp-source-file (format "/tmp/pygmentize-%s.txt" (md5 (current-time-string)))))
     (with-temp-file temp-source-file (insert (org-element-property :value code)))
-    (shell-command-to-string (format "%s -S %s -l \"%s\" -f html %s"
+    (shell-command-to-string (format "%s -l \"%s\" -f html %s"
                                      ox-pygments-path
-                                     ox-pygments-style
                                      (or (org-element-property :language code) "")
                                      temp-source-file))))
 
