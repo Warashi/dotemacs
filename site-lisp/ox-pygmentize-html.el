@@ -1,4 +1,4 @@
-;;; ox-pygmentize-html --- org-mode to html export with code highlight
+;;; ox-pygmentize-html --- org-mode to html export with code highlight -*- lexical-binding:t -*-
 ;;; Commentary:
 ;;; code mainly taken from https://linevi.ch/en/org-pygments.html
 ;;; Code:
@@ -50,7 +50,3 @@
 
 (provide 'ox-pygmentize-html)
 ;;; ox-pygmentize-html.el ends here
-
-;;; Local Variables:
-;;; lexical-binding: t
-;;; End:
