@@ -659,6 +659,5 @@ init.el: init.org
   :after ox
   :require t
   :custom ((org-html-html5-fancy . t)
-           (org-html-doctype . "html5")
-           (ox-pygments-option . "style=solarized-light,linenos=table,wrapcode")))
+           (org-html-doctype . "html5")))
 #+end_src
