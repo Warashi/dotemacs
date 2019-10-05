@@ -1,6 +1,6 @@
 ;;; ox-pygmentize-html --- org-mode to html export with code highlight -*- lexical-binding:t -*-
 ;;; Commentary:
-;;; code mainly taken from https://linevi.ch/en/org-pygments.html
+;;; code written by Warashi
 ;;; Code:
 
 (require 'org)
@@ -12,20 +12,27 @@
   "Path of the pygmentize command."
   :type 'string)
 
-(defcustom org-pygments-option ""
-  "Option of pygmentize (-O)."
-  :type 'string)
+(defcustom org-pygments-option '()
+  "Option of pygmentize (-O).
+This list is concatenated with `,' as separator."
+  :type '(string))
 
 ;;;###autoload
 (defun ox-pygments-org-html-code (code contents info)
-  "export to html function with pygments code highlight."
-  (let ((temp-source-file (format "/tmp/pygmentize-%s.txt" (md5 (current-time-string)))))
-    (with-temp-file temp-source-file (insert (org-element-property :value code)))
-    (shell-command-to-string (format "%s -l \"%s\" -f html -O \"%s\" %s"
-                                     org-pygments-path
-                                     (or (org-element-property :language code) "")
-                                     org-pygments-option
-                                     temp-source-file))))
+  "Export to html function with pygments code highlight."
+  (let ((pygments-language (or (org-element-property :language code) ""))
+        (pygments-option (mapconcat #'identity org-pygments-option ",")))
+    (with-temp-buffer
+      (insert (org-element-property :value code))
+      (print pygments-option)
+      (apply #'call-process-region
+             `(,(point-min) ,(point-max)
+               ,org-pygments-path
+               t t nil
+               "-l" ,pygments-language
+               "-f" "html"
+               "-O" ,pygments-option))
+      (buffer-string))))
 
 (org-export-define-derived-backend 'html-with-pygmentize 'html
   :menu-entry
