@@ -8,11 +8,11 @@
 (require 'ox-html)
 
 ;; Path for pygments or command name
-(defcustom ox-pygments-path "pygmentize"
+(defcustom org-pygments-path "pygmentize"
   "Path of the pygmentize command."
   :type 'string)
 
-(defcustom ox-pygments-option ""
+(defcustom org-pygments-option ""
   "Option of pygmentize (-O)."
   :type 'string)
 
@@ -22,9 +22,9 @@
   (let ((temp-source-file (format "/tmp/pygmentize-%s.txt" (md5 (current-time-string)))))
     (with-temp-file temp-source-file (insert (org-element-property :value code)))
     (shell-command-to-string (format "%s -l \"%s\" -f html -O \"%s\" %s"
-                                     ox-pygments-path
+                                     org-pygments-path
                                      (or (org-element-property :language code) "")
-                                     ox-pygments-option
+                                     org-pygments-option
                                      temp-source-file))))
 
 (org-export-define-derived-backend 'html-with-pygmentize 'html
