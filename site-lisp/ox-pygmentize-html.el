@@ -45,7 +45,8 @@ This list is concatenated with `,' as separator."
                 (org-open-file (org-html-export-to-html-with-pygmentize nil s v b)))))))
   :translate-alist
   '((src-block .  ox-pygments-org-html-code)
-    (example-block . ox-pygments-org-html-code)))
+    (example-block . ox-pygments-org-html-code))
+  :filters-alist '((:filter-final-output . nil)))
 
 ;;;###autoload
 (defun org-html-export-as-html-with-pygmentize (&optional async subtreep visible-only body-only ext-plist)
