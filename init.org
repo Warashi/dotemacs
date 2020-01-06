@@ -265,9 +265,10 @@ init.el: init.org
 #+begin_src emacs-lisp
 (leaf exec-path-from-shell
   :straight t
-  :hook (after-init-hook . exec-path-from-shell-initialize)
+  :require t
   :config
-  (add-to-list 'exec-path-from-shell-variables "EMAIL"))
+  (add-to-list 'exec-path-from-shell-variables "EMAIL")
+  (exec-path-from-shell-initialize))
 #+end_src
 
 *** ace-window
