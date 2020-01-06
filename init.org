@@ -352,8 +352,8 @@ init.el: init.org
 *** fus.el
 #+begin_src emacs-lisp
 (leaf fuz
-  :straight '(fuz :type git :host github :repo "cireu/fuz.el"
-                  :files ("*" (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el" "*-tests.el")))
+  :straight '(fuz :type git :host github :repo "rustify-emacs/fuz.el"
+                  :files ("*"))
   :require t
   :config
   (unless (require 'fuz-core nil t)
