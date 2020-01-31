@@ -319,7 +319,7 @@ init.el: init.org
 #+end_src
 
 *** language server protocol
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf lsp-mode
   :straight t
   :custom ((lsp-prefer-flymake . nil)
@@ -352,8 +352,7 @@ init.el: init.org
 *** fus.el
 #+begin_src emacs-lisp
 (leaf fuz
-  :straight '(fuz :type git :host github :repo "rustify-emacs/fuz.el"
-                  :files ("*"))
+  :straight t
   :require t
   :config
   (unless (require 'fuz-core nil t)
@@ -389,7 +388,7 @@ init.el: init.org
 #+end_src
 
 *** ivy, counsel, swiper
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (leaf ivy
   :straight t
   :hook ((emacs-startup-hook . ivy-mode)))
@@ -402,17 +401,22 @@ init.el: init.org
 (leaf ivy-prescient
   :straight t
   :hook ((emacs-startup-hook . ivy-prescient-mode)))
-(leaf ivy-posframe
+(leaf ivy-yasnippet
   :straight t
-  :hook ((emacs-startup-hook . ivy-posframe-mode))
-  :custom ((ivy-posframe-display-functions-alist . '((swiper          . nil)
-                                                     (complete-symbol . ivy-posframe-display-at-point)
-                                                     (counsel-M-x     . ivy-posframe-display-at-frame-center)
-                                                     (t               . ivy-posframe-display-at-frame-center)))))
+  :after ivy yasnippet
+  :bind (("C-c y" . ivy-yasnippet)))
+(leaf ivy-fuz
+  :straight t
+  :after ivy
+  :custom
+  ((ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
+   (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy))))
+  :config
+  (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
 #+end_src
 
 *** helm
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf helm
   :straight t
   :require helm-config
@@ -446,7 +450,7 @@ init.el: init.org
 #+end_src
 
 *** expand-region
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (leaf expand-region
   :straight t
   :bind (("C-c e" . er/expand-region)))
@@ -578,10 +582,6 @@ init.el: init.org
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-(leaf ivy-yasnippet
-  :straight t
-  :after ivy yasnippet
-  :bind (("C-c y" . ivy-yasnippet)))
 #+end_src
 
 *** magit
