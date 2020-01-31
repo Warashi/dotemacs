@@ -342,6 +342,15 @@ init.el: init.org
   :config ((add-to-list 'company-backends 'company-lsp)))
 #+end_src
 
+*** projectile
+#+begin_src emacs-lisp
+(leaf projectile
+  :straight t
+  :bind (:projectile-mode-map ("C-c p" . projectile-command-map))
+  :Custom (projectile-completion-system . 'ivy)
+  :hook (emacs-startup-hook . projectile-mode))
+#+end_src
+
 *** flycheck
 #+begin_src emacs-lisp
 (leaf flycheck
