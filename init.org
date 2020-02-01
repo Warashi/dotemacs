@@ -7,7 +7,7 @@ init.el: init.org
 		"(progn \
 			(require 'ob-tangle) \
 			(org-babel-tangle-file \"$<\" \"$@\" \"emacs-lisp\"))"
-	$(EMACS) -q -l init.el --batch --eval '(straight--transaction-finalize)' --eval '(kill-emacs)'
+	$(EMACS) -q -l init.el --batch --eval "(run-hooks 'after-init-hook)"
 %.elc: %.el
 	$(EMACS) -q -l init.el --batch -f batch-byte-compile $<
 #+end_src
@@ -61,29 +61,34 @@ init.el: init.org
 (substitute-key-definition 'dabbrev-expand 'hippie-expand global-map)
 #+end_src
 
-** setup straight.el and leaf
-*** install straight.el
-#+begin_src emacs-lisp
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(custom-set-variables '(straight-vc-git-default-clone-depth 1))
-#+end_src
-
+** setup package-manager and leaf
 *** install leaf
 #+begin_src emacs-lisp
-(straight-use-package 'leaf)
-(straight-use-package 'leaf-keywords)
-(leaf-keywords-init)
+(prog1 "leaf"
+  (prog1 "install leaf"
+    (custom-set-variables
+     '(package-archives '(("org"   . "https://orgmode.org/elpa/")
+                          ("melpa" . "https://melpa.org/packages/")
+                          ("gnu"   . "https://elpa.gnu.org/packages/"))))
+    (package-initialize)
+    (unless (package-installed-p 'leaf)
+      (package-refresh-contents)
+      (package-install 'leaf)))
+
+  (leaf leaf-keywords
+    :ensure t
+    :config
+    ;; initialize leaf-keywords.el
+    (leaf-keywords-init)))
+#+end_src
+
+*** install feather.el
+#+begin_src emacs-lisp :tangle no
+(leaf feather
+  :ensure async-await
+  :require feather
+  :load-path* "feather.el"
+  :config (feather-setup))
 #+end_src
 
 ** 基本的なUI/UX設定
@@ -249,14 +254,14 @@ init.el: init.org
 *** theme
 #+begin_src emacs-lisp :tangle no
 (leaf doom-themes
-  :straight t
+  :ensure t
   :config
   (load-theme 'doom-one t))
 #+end_src
 
 #+begin_src emacs-lisp
 (leaf solarized-theme
-  :straight t
+  :ensure t
   :config
   (load-theme 'solarized-dark t))
 #+end_src
@@ -264,7 +269,7 @@ init.el: init.org
 *** exec-path-from-shell
 #+begin_src emacs-lisp
 (leaf exec-path-from-shell
-  :straight t
+  :ensure t
   :require t
   :config
   (add-to-list 'exec-path-from-shell-variables "EMAIL")
@@ -274,7 +279,7 @@ init.el: init.org
 *** ace-window
 #+begin_src emacs-lisp
 (leaf ace-window
-  :straight t
+  :ensure t
   :custom ((aw-scope . 'frame))
   :bind ("C-c o" . ace-window))
 #+end_src
@@ -282,46 +287,46 @@ init.el: init.org
 *** minibufferにmodelineの情報を出すやつ
 #+begin_src emacs-lisp
 (leaf smart-mode-line
-  :straight t
+  :ensure t
   :custom (sml/no-confirm-load-theme . t)
   :hook (emacs-startup-hook . sml/setup))
 (leaf rich-minority
-  :straight t
+  :ensure t
   :custom ((rm-blacklist . nil)
            (rm-whitelist . "fly\\|lsp"))
   :hook (emacs-startup-hook . rich-minority-mode))
 (leaf mini-modeline
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . mini-modeline-mode))
 #+end_src
 
 *** languages
 #+begin_src emacs-lisp
 (leaf go-mode
-  :straight t)
+  :ensure t)
 (leaf rust-mode
-  :straight t)
+  :ensure t)
 (leaf dockerfile-mode
-  :straight t)
+  :ensure t)
 (leaf yaml-mode
-  :straight t)
+  :ensure t)
 (leaf fish-mode
-  :straight t)
+  :ensure t)
 (leaf markdown-mode
-  :straight t)
+  :ensure t)
 (leaf edit-indirect
-  :straight t)
+  :ensure t)
 (leaf json-mode
-  :straight t)
+  :ensure t)
 (leaf web-mode
-  :straight t
+  :ensure t
   :mode ("\\.html?\\'" "\\.jsx?\\'" "\\.tsx?\\'"))
 #+end_src
 
 *** language server protocol
 #+begin_src emacs-lisp :tangle no
 (leaf lsp-mode
-  :straight t
+  :ensure t
   :custom ((lsp-prefer-flymake . nil)
            (lsp-auto-guess-root . t)
            (lsp-document-sync-method . 'incremental)
@@ -331,10 +336,10 @@ init.el: init.org
          (scala-mode-hook . lsp)
          (web-mode-hook . lsp)))
 (leaf lsp-ui
-  :straight t
+  :ensure t
   :hook ((lsp-mode-hook . lsp-ui-mode)))
 (leaf company-lsp
-  :straight t
+  :ensure t
   :after company-mode
   :custom ((company-lsp-cache-candidates . t)
            (company-lsp-async . t)
@@ -345,7 +350,7 @@ init.el: init.org
 *** projectile
 #+begin_src emacs-lisp
 (leaf projectile
-  :straight t
+  :ensure t
   :bind (:projectile-mode-map ("C-c p" . projectile-command-map))
   :custom (projectile-completion-system . 'ivy)
   :hook (emacs-startup-hook . projectile-mode))
@@ -354,68 +359,60 @@ init.el: init.org
 *** flycheck
 #+begin_src emacs-lisp
 (leaf flycheck
-  :straight t
+  :ensure t
   :hook ((emacs-startup-hook . global-flycheck-mode)))
 #+end_src
 
-*** fus.el
+*** fuz.el
 #+begin_src emacs-lisp
 (leaf fuz
-  :straight t
-  :require t
-  :config
-  (unless (require 'fuz-core nil t)
-    (fuz-build-and-load-dymod)))
-#+end_src
-
-*** snails
-#+begin_src emacs-lisp :tangle no
-(leaf snails
-  :straight '(snails :type git :host github :repo "manateelazycat/snails")
-  :require t)
+  :ensure t
+  :commands fuz-build-and-load-dymod
+  :init (defun load-fuz-core () (unless (require 'fuz-core nil t) (fuz-build-and-load-dymod)))
+  :hook (after-init-hook . load-fuz-core))
 #+end_src
 
 *** prescient
 #+begin_src emacs-lisp
 (leaf prescient
-  :straight t
+  :ensure t
   :hook ((emacs-startup-hook . prescient-persist-mode)))
 (leaf company-prescient
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . company-prescient-mode))
 #+end_src
 
 *** company
 #+begin_src emacs-lisp
 (leaf company
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . global-company-mode)
   :custom (company-global-modes . '(not org-mode text-mode)))
 (leaf company-posframe
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . company-posframe-mode))
 #+end_src
 
 *** ivy, counsel, swiper
 #+begin_src emacs-lisp
 (leaf ivy
-  :straight t
+  :ensure t
   :hook ((emacs-startup-hook . ivy-mode)))
 (leaf counsel
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . counsel-mode))
 (leaf swiper
-  :straight t
+  :ensure t
   :bind ("M-s M-s" . swiper))
 (leaf ivy-prescient
-  :straight t
+  :ensure t
   :hook ((emacs-startup-hook . ivy-prescient-mode)))
 (leaf ivy-yasnippet
-  :straight t
+  :ensure t
   :after ivy yasnippet
   :bind (("C-c y" . ivy-yasnippet)))
 (leaf ivy-fuz
-  :straight t
+  :ensure t
   :after ivy
   :custom
   ((ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
@@ -427,7 +424,7 @@ init.el: init.org
 *** helm
 #+begin_src emacs-lisp :tangle no
 (leaf helm
-  :straight t
+  :ensure t
   :require helm-config
   :hook (emacs-startup-hook . helm-mode)
   :bind (("M-x" . helm-M-x)
@@ -438,22 +435,22 @@ init.el: init.org
          ("M-y" . helm-show-kill-ring)))
 
 (leaf helm-descbinds
-  :straight t
+  :ensure t
   :after helm
   :bind (("C-h b" . helm-descbinds)))
 
 (leaf helm-fuz
-  :straight t
+  :ensure t
   :after helm
   :hook (emacs-startup-hook . helm-fuz-mode))
 
 (leaf helm-ghq
-  :straight t
+  :ensure t
   :after helm
   :bind (("C-c h" . helm-ghq)))
 
 (leaf helm-c-yasnippet
-  :straight t
+  :ensure t
   :after helm
   :bind (("C-c y" . helm-yas-complete)))
 #+end_src
@@ -461,14 +458,14 @@ init.el: init.org
 *** expand-region
 #+begin_src emacs-lisp :tangle no
 (leaf expand-region
-  :straight t
+  :ensure t
   :bind (("C-c e" . er/expand-region)))
 #+end_src
 
 *** smartparens
 #+begin_src emacs-lisp
 (leaf smartparens
-  :straight t
+  :ensure t
   :require smartparens-config
   :hook ((prog-mode-hook . smartparens-mode)))
 #+end_src
@@ -476,88 +473,88 @@ init.el: init.org
 *** git-gutter
 #+begin_src emacs-lisp
 (leaf git-gutter
-  :straight t
+  :ensure t
   :hook ((emacs-startup-hook . global-git-gutter-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
 (leaf git-gutter-fringe
-  :straight t
+  :ensure t
   :require t)
 #+end_src
 
 *** evil
 #+begin_src emacs-lisp :tangle no
 (leaf evil
-  :straight t
+  :ensure t
   :custom ((evil-want-keybinding . nil)
            (evil-want-C-u-scroll . t))
   :hook ((emacs-startup-hook . evil-mode)))
 (leaf evil-collection
-  :straight t
+  :ensure t
   :after evil
   :hook ((emacs-startup-hook . evil-collection-init)))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
 (leaf evil-magit
-  :straight t
+  :ensure t
   :require t)
 #+end_src
 
 *** editorconfig
 #+begin_src emacs-lisp
 (leaf editorconfig
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . editorconfig-mode))
 #+end_src
 
 *** outshine
 #+begin_src emacs-lisp
 (leaf outshine
-  :straight t
+  :ensure t
   :bind (("C-c q" . outshine-cycle)))
 #+end_src
 
 *** highlight-symbol
 #+begin_src emacs-lisp
 (leaf highlight-symbol
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . highlight-symbol-mode))
 #+end_src
 
 *** M-n, M-pとかの区切りを日本語対応するやつ
 #+begin_src emacs-lisp
 (leaf jaword
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . global-jaword-mode))
 #+end_src
 
 *** C-yとかで変更のあった場所をハイライトするやつ
 #+begin_src emacs-lisp
 (leaf volatile-highlights
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . volatile-highlights-mode))
 #+end_src
 
 *** 途中までコマンドのキー入力したら候補を表示するやつ
 #+begin_src emacs-lisp
 (leaf which-key
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . which-key-mode))
 #+end_src
 
 *** 括弧のネストに合わせて色をつけるやつ
 #+begin_src emacs-lisp
 (leaf rainbow-delimiters
-  :straight t
+  :ensure t
   :hook (prog-mode-hook . rainbow-delimiters-mode-enable))
 #+end_src
 
 *** replace処理を見やすくする
 #+begin_src emacs-lisp
 (leaf visual-regexp
-  :straight t
+  :ensure t
   :custom ((vr/plain . t))
   :bind (("C-c r" . vr/replace)))
 #+end_src
@@ -565,7 +562,7 @@ init.el: init.org
 *** regexpをpythonのやつをつかえるようにする
 #+begin_src emacs-lisp :tangle no
 (leaf visual-regexp-steroids
-  :straight t
+  :ensure t
   :require t
   :after visual-regexp)
 #+end_src
@@ -573,19 +570,19 @@ init.el: init.org
 *** undo強化
 #+begin_src emacs-lisp
 (leaf undo-tree
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . global-undo-tree-mode))
 #+end_src
 
 *** snippet
 #+begin_src emacs-lisp
 (leaf yasnippet
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . yas-global-mode)
   :config
   (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand))
 (leaf yasnippet-snippets
-  :straight t
+  :ensure t
   :require t
   :after yasnippet)
 #+end_src
@@ -596,14 +593,14 @@ init.el: init.org
 *** magit
 #+begin_src emacs-lisp
 (leaf magit
-  :straight t
+  :ensure t
   :bind (("C-c g" . magit-status)))
 #+end_src
 
 *** direnv
 #+begin_src emacs-lisp
 (leaf direnv
-  :straight t
+  :ensure t
   :hook (emacs-startup-hook . direnv-mode))
 #+end_src
 
@@ -643,7 +640,7 @@ init.el: init.org
 *** org-mode
 #+begin_src emacs-lisp
 (leaf org
-  :straight org org-plus-contrib
+  :ensure org org-plus-contrib
   :commands (org-clock-is-active)
   :bind (("C-c c" . org-capture)
          ("C-c a" . org-agenda))
@@ -660,7 +657,7 @@ init.el: init.org
                                       ("w" "TODO" entry (file+headline "task.org" "Task") "** TODO %?\n")))))
 
 (leaf ox-hugo
-  :straight t
+  :ensure t
   :after ox)
 #+end_src
 

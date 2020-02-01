@@ -1,0 +1,3 @@
+[submodule "feather.el"]
+	path = feather.el
+	url = https://github.com/conao3/feather.el.git
