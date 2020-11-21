@@ -271,6 +271,7 @@ init.el: init.org
 (leaf exec-path-from-shell
   :ensure t
   :require t
+  :custom (exec-path-from-shell-arguments . '("-l"))
   :config
   (add-to-list 'exec-path-from-shell-variables "EMAIL")
   (exec-path-from-shell-initialize))
