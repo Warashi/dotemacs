@@ -3,4 +3,6 @@
 !Makefile
 !init.org
 !site-lisp/
-!feather.el
+!ddskk/
+ddskk/jisyo
+ddskk/record
