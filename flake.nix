@@ -60,7 +60,12 @@
             (pkgs.tangleOrgBabelFile "init.el" ./init.org {})
           ];
 
-          extraPackages = ["leaf"];
+          extraPackages = [
+            "leaf"
+            "leaf-keywords"
+            "blackout"
+            "hydra"
+          ];
         };
       in rec {
         packages = flake-utils.lib.flattenTree {
