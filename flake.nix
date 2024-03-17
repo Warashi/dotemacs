@@ -52,7 +52,7 @@
         };
 
         emacs = pkgs.emacsTwist {
-          emacsPackage = pkgs.emacs-macport;
+          emacsPackage = pkgs.emacs;
 
           registries = import ./registries.nix inputs;
           lockDir = ./lock;
