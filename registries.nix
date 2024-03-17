@@ -11,6 +11,7 @@ inputs: [
     path = inputs.melpa.outPath + "/recipes";
   }
   {
+    name = "nongnu";
     type = "elpa";
     path = inputs.nongnu.outPath + "/elpa-packages";
     exclude = [
