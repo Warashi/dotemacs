@@ -57,7 +57,7 @@
           registries = import ./registries.nix inputs;
           lockDir = ./lock;
           initFiles = [
-            (pkgs.tangleOrgBabelFile "init.el" ./init.org {})
+            (pkgs.tangleOrgBabelFile "init.el" ./emacs-config.org {})
           ];
 
           extraPackages = [
