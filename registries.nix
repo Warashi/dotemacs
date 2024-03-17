@@ -9,6 +9,9 @@ inputs: [
     name = "melpa";
     type = "melpa";
     path = inputs.melpa.outPath + "/recipes";
+    exclude = [
+      "bbdb"
+    ];
   }
   {
     name = "nongnu";
@@ -17,5 +20,10 @@ inputs: [
     exclude = [
       "org-contrib"
     ];
+  }
+  {
+    name = "emacsmirror";
+    type = "gitmodules";
+    path = inputs.epkgs.outPath + "/.gitmodules";
   }
 ]
