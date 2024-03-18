@@ -152,4 +152,5 @@
 
 *** 対応する括弧を表示
 #+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook #'show-paren-mode)
 #+end_src
