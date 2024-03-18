@@ -30,6 +30,13 @@
 (define-key key-translation-map (kbd "M-h") (kbd "M-DEL"))
 #+end_src
 
+** Commands as Meta
+#+begin_src emacs-lisp
+  (when (memq window-system '(mac ns))
+    (setq mac-option-modifier 'meta)
+    (setq mac-command-modifier 'meta))
+#+end_src
+
 ** emacs そのものを終了できるようにする
 #+begin_src emacs-lisp
 (defalias 'exit 'save-buffers-kill-emacs)
