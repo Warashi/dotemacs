@@ -59,13 +59,6 @@
           initFiles = [
             (pkgs.tangleOrgBabelFile "init.el" ./emacs-config.org {})
           ];
-
-          extraPackages = [
-            "leaf"
-            "leaf-keywords"
-            "blackout"
-            "hydra"
-          ];
         };
       in rec {
         packages = flake-utils.lib.flattenTree {
