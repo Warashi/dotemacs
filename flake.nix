@@ -61,12 +61,22 @@
           ];
         };
       in rec {
+        devShells = {
+          default = pkgs.mkShell {
+            buildInputs = [
+              pkgs.coreutils
+            ];
+          };
+        };
+
         packages = flake-utils.lib.flattenTree {
           inherit emacs;
         };
+
         apps = emacs.makeApps {
           lockDirName = "lock";
         };
+
         defaultPackage = packages.emacs;
       }
     );
