@@ -1,3 +1,10 @@
+* use-package
+#+begin_src emacs-lisp
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-ensure-function #'ignore)
+#+end_src
+
 * emacs -q -lした時に、user-emacs-directoryが変わるように
 #+begin_src emacs-lisp
 (when load-file-name
@@ -31,6 +38,15 @@
 ** hippie-expandを使う
 #+begin_src emacs-lisp
 (substitute-key-definition 'dabbrev-expand 'hippie-expand global-map)
+#+end_src
+
+* PATH設定
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
 #+end_src
 
 * 基本的なUI/UX設定
@@ -129,10 +145,4 @@
 
 *** 対応する括弧を表示
 #+begin_src emacs-lisp
-(add-hook 'emacs-startup-hook #'show-paren-mode)
-#+end_src
-
-*** 最近開いたファイル
-#+begin_src emacs-lisp
-(add-hook 'emacs-startup-hook #'recentf-mode)
 #+end_src
