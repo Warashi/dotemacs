@@ -7,7 +7,7 @@
       url = "github:numtide/flake-utils";
     };
     twist = {
-      url = "github:Warashi/twist.nix?ref=fix/invalid-regex-on-darwin";
+      url = "github:emacs-twist/twist.nix";
     };
     org-babel = {
       url = "github:emacs-twist/org-babel";
