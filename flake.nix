@@ -81,7 +81,7 @@
           twist = {
             imports = [
               inputs.twist.homeModules.emacs-twist
-              (import ./emacs/home-module.nix self.packages)
+              (import ./home-module.nix self.packages)
             ];
           };
         };
