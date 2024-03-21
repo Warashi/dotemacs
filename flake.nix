@@ -51,7 +51,7 @@
           ];
         };
 
-        emacs = pkgs.emacsTwist {
+        emacs-config = pkgs.emacsTwist {
           emacsPackage = pkgs.emacs;
 
           registries = import ./registries.nix inputs;
@@ -70,14 +70,23 @@
         };
 
         packages = flake-utils.lib.flattenTree {
-          inherit emacs;
+          inherit emacs-config;
         };
 
-        apps = emacs.makeApps {
+        apps = emacs-config.makeApps {
           lockDirName = "lock";
         };
 
-        defaultPackage = packages.emacs;
+        homeModules = {
+          twist = {
+            imports = [
+              inputs.twist.homeModules.emacs-twist
+              (import ./emacs/home-module.nix self.packages)
+            ];
+          };
+        };
+
+        defaultPackage = packages.emacs-config;
       }
     );
 }
